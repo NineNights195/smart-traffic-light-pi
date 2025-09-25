@@ -1,4 +1,4 @@
-import tm1637
+import tm1637 # type: ignore
 import time
 
 # CLK -> GPIO18, DIO -> GPIO16
