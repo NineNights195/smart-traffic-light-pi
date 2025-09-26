@@ -5,7 +5,7 @@ picam2 = Picamera2()
 
 # Create video configure
 video_config = picam2.create_video_configuration(
-    main={"format": "RGB888"}  # force ISP to output RGB
+    main={"format": "RGB888"}  # force the output ISP to RGB
 )
 picam2.configure(video_config)
 
@@ -18,7 +18,6 @@ print("Pi Camera 3 started. Press 'q' to quit.")
 
 try:
     while True:
-        # Get ISP-processed RGB frame
         frame = picam2.capture_array("main")
 
         cv2.imshow("Pi Camera 3 Test", frame)
