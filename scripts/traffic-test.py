@@ -1,0 +1,46 @@
+from gpiozero import LED, TrafficLights
+from time import sleep
+
+# Traffic light module
+lights = TrafficLights(red=17, amber=27, green=22)
+
+# Pedestrian lights
+ped_red1 = LED(24)
+ped_green1 = LED(23)
+
+try:
+    while True:
+        # Phase 1: Cars RED, Pedestrians WALK
+        lights.red.on()
+        lights.amber.off()
+        lights.green.off()
+        ped_red1.off()
+        ped_green1.on()
+        sleep(5)
+
+        # Phase 1.5: Pedestrian warning (Green flashes)
+        ped_green1.blink(on_time=0.5, off_time=0.5, n=5, background=False)
+
+        # Phase 2: Cars GREEN, Pedestrians DON'T WALK
+        lights.red.off()
+        lights.amber.off()
+        lights.green.on()
+        ped_red1.on()
+        ped_green1.off()
+        sleep(5)
+
+        # Phase 3: Cars YELLOW, Pedestrians still DON'T WALK
+        lights.red.off()
+        lights.amber.on()
+        lights.green.off()
+        ped_red1.on()
+        ped_green1.off()
+        sleep(2)
+
+except KeyboardInterrupt:
+    print("Stopped by user")
+finally:
+    lights.off()
+    ped_red1.off()
+    ped_green1.off()
+    print("Lights turned off")
