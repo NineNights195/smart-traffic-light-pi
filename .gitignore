@@ -1,9 +1,9 @@
-# Byte-compiled / optimized / DLL files
+# Python bytecode / compiled
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual environment
+# Virtual environments
 venv/
 env/
 .venv/
@@ -14,7 +14,7 @@ build/
 dist/
 *.egg-info/
 
-# IDE/editor files
+# IDE / Editor files
 .vscode/
 .idea/
 *.swp
