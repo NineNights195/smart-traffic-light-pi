@@ -1,21 +1,17 @@
 from picamera2 import Picamera2
 import cv2
+from time import sleep
 
 picam2 = Picamera2()
 
-# Create video configure
-video_config = picam2.create_video_configuration(
-    main={"format": "RGB888"}  # force the output ISP to RGB
-)
+# Initialize camera
+video_config = picam2.create_video_configuration(main={"format": "RGB888"})
 picam2.configure(video_config)
-
-# Enable auto white balance
-picam2.set_controls({"AwbEnable": True})
+picam2.set_controls({"AwbEnable": True}) # Enable auto white balance
 
 picam2.start()
-
+sleep(2)  # camera warm-up
 print("Pi Camera 3 started. Press 'q' to quit.")
-
 try:
     while True:
         frame = picam2.capture_array("main")
