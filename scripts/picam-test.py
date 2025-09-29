@@ -7,7 +7,6 @@ picam2 = Picamera2()
 # Initialize camera
 video_config = picam2.create_video_configuration(main={"format": "RGB888"})
 picam2.configure(video_config)
-picam2.set_controls({"AwbEnable": True}) # Enable auto white balance
 
 picam2.start()
 sleep(2)  # camera warm-up
