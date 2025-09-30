@@ -12,7 +12,7 @@ ped_green2 = LED(5)
 
 try:
     while True:
-        # Phase 1: Cars RED, Pedestrians WALK
+        print("Phase 1: Cars RED, Pedestrians WALK")
         lights.red.on()
         lights.amber.off()
         lights.green.off()
@@ -22,11 +22,11 @@ try:
         ped_green2.on()
         sleep(5)
 
-        # Phase 1.5: Pedestrian warning (Green flashes)
+        print("Phase 1.5: Pedestrian warning")
         ped_green1.blink(on_time=0.5, off_time=0.5, n=5, background=True)
         ped_green2.blink(on_time=0.5, off_time=0.5, n=5, background=False)
 
-        # Phase 2: Cars GREEN, Pedestrians DON'T WALK
+        print("Phase 2: Cars GREEN, Pedestrians DON'T WALK")
         lights.red.off()
         lights.amber.off()
         lights.green.on()
@@ -36,7 +36,7 @@ try:
         ped_green2.off()
         sleep(5)
 
-        # Phase 3: Cars YELLOW, Pedestrians still DON'T WALK
+        print("Phase 3: Cars YELLOW, Pedestrians DON'T WALK")
         lights.red.off()
         lights.amber.on()
         lights.green.off()
