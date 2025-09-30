@@ -23,7 +23,8 @@ dist/
 .DS_Store
 Thumbs.db
 
-# Logs
+# Data & Logs
+data/
 *.log
 
 # Model / checkpoint files
