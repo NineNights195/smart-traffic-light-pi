@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Traffic Light - ไฟจราจรอัจฉริยะ</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="app-header card">
+    <div class="title-wrap">
+      <img class="logo" alt="traffic" src="https://cdn-icons-png.flaticon.com/512/808/808569.png">
+      <div>
+        <h1>Smart Traffic Light - ไฟจราจรอัจฉริยะ</h1>
+        <p class="subtitle">แสดงสถิติและภาพรวมสถานการณ์จราจรแบบใกล้เคียงเรียลไทม์</p>
+      </div>
+    </div>
+    <div class="meta-time" id="headerTime">วันที่: —</div>
+  </header>
+
+  <main class="container">
+    <!-- แถวบน: การ์ด 3 ใบ -->
+    <section class="overview-grid">
+        <article class="card kpi">
+          <h3>จำนวนคน (ตอนนี้)</h3>
+          <div class="kpi-value kpi-red">
+            <span id="kpiNowHumans">0</span><small id="kpiNowHumansTrend">-</small>
+          </div>
+        </article>
+
+        <article class="card kpi">
+          <h3>จำนวนรถ (ตอนนี้)</h3>
+          <div class="kpi-value kpi-blue">
+            <span id="kpiNowCars">0</span><small id="kpiNowCarsTrend">-</small>
+          </div>
+        </article>
+
+        <article class="card donut-card">
+          <h3>สัดส่วนปริมาณทั้งหมด</h3>
+          <div class="chart-wrapper h-180">
+            <canvas id="donutChart"></canvas>
+          </div>
+        </article>
+    </section>
+
+    <!-- แถวกลาง: กราฟเส้นซ้าย + ตารางขวา -->
+    <section class="middle-grid">
+      <article class="card">
+        <div class="section-head">
+          <h3>ตารางแสดงข้อมูลปริมาณ</h3>
+          <p class="muted">ความหนาแน่นการจราจร (ช่วง 5 นาทีล่าสุด)</p>
+        </div>
+        <div class="chart-wrapper h-260">
+          <canvas id="lineChart"></canvas>
+        </div>
+      </article>
+
+      <aside class="card table-card">
+        <div class="section-head">
+          <h3>ตารางข้อมูลรายละเอียด</h3>
+          <p class="muted">อัปเดตทุก 5 นาที</p>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>เวลา</th>
+                <th>จำนวนรถ</th>
+                <th>จำนวนคน</th>
+              </tr>
+            </thead>
+            <tbody id="detailRows"></tbody>
+          </table>
+        </div>
+      </aside>
+    </section>
+
+    <section class="card">
+      <h3>กล้องจราจรสด</h3>
+      <img id="cameraFeed" src="http://localhost:8000/api/camera/stream" alt="Camera Feed" style="width:100%; max-height:400px;"/>
+    </section>
+
+    <!-- แถวล่าง: ตัวกรอง/ปุ่ม -->
+    <section class="card controls">
+      <div class="control-row">
+        <label for="datePick" class="label">ช่วงวันที่</label>
+        <input id="datePick" type="date" />
+        <button class="btn" id="btnToday">วันนี้</button>
+        <button class="btn">แนะนำเส้นทาง</button>
+        <button class="btn" id="btnRefresh">รีเฟรชทันที</button>
+        <button class="btn btn-primary">ค้นหาข้อมูล</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <small>© 2025 Smart Traffic Dashboard</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
