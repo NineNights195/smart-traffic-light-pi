@@ -1,13 +1,3 @@
-# main.py
-"""
-Orchestrator:
-- starts detector
-- runs state machine
-- updates hardware (TrafficLights, pedestrian LEDs, TM1637) if SIMULATION==False
-- shows canvas that mirrors hardware + annotated camera frames
-- logs aggregated counts to SQLite DB every INTERVAL_DB seconds
-"""
-
 import time
 import cv2
 import numpy as np
@@ -164,7 +154,7 @@ try:
 
         # combine horizontally (keep total width manageable)
         combined = np.hstack((a0, a1, ui_canvas))
-        cv2.imshow("Smart Traffic Light (mirror)", combined)
+        cv2.imshow("Smart Traffic Light", combined)
 
         # write DB periodically
         if now - db_start >= config.INTERVAL_DB:
