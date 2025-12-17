@@ -1,4 +1,3 @@
-# state_machine.py
 import time
 from config import (
     YELLOW_DURATION,
@@ -12,7 +11,7 @@ PED_WALK = "WALK"
 PED_STOP = "STOP"
 
 # ================= Threshold & Timing rules ================= #
-# แบ่งช่วงจำนวนคน/รถ
+# Split count ranges for pedestrians/vehicles
 PEDESTRIAN_THRESHOLDS = {
     "small": (1, 3),
     "medium": (4, 6),
@@ -25,21 +24,21 @@ VEHICLE_THRESHOLDS = {
     "large": (7, float("inf"))
 }
 
-# เวลาสำหรับคน
+# Green time for pedestrians
 PEDESTRIAN_GREEN_TIME = {
     "small": 8,
     "medium": 10,
     "large": 12
 }
 
-# เวลาสำหรับรถ
+# Green time for vehicles
 VEHICLE_GREEN_TIME = {
     "small": 7,
     "medium": 9,
     "large": 11
 }
 
-# เวลาที่รถต้องแดงเพื่อให้คนข้าม
+# Duration vehicles stay red to let pedestrians cross
 VEHICLE_RED_FOR_PEDESTRIAN = {
     "small": 8,
     "medium": 10,
@@ -70,13 +69,13 @@ class StateMachine:
         category = self._categorize(vehicle_count, VEHICLE_THRESHOLDS)
         if category:
             return VEHICLE_GREEN_TIME[category]
-        return 0  # ถ้าไม่มีรถเลย
+        return 0
 
     def calculate_person_timer(self, person_count):
         category = self._categorize(person_count, PEDESTRIAN_THRESHOLDS)
         if category:
             return PEDESTRIAN_GREEN_TIME[category]
-        return 0  # ถ้าไม่มีคนเลย
+        return 0
 
     def calculate_vehicle_red(self, person_count):
         category = self._categorize(person_count, PEDESTRIAN_THRESHOLDS)
@@ -91,11 +90,18 @@ class StateMachine:
 
         elapsed = (now - self.phase_start) if self.phase_start else 0
 
-        # --- Special case: only vehicles, no person ---
+        # --- Special case: only vehicles, no pedestrians ---
         if person_count == 0 and vehicle_count > 0 and self.state == "VEHICLE":
             self.traffic_state = TRAFFIC_GREEN
             self.ped_state = PED_STOP
-            self.timer_value = None  # แสดง ----
+            self.timer_value = None  # display ----
+            return self._info()
+        
+        # --- Special case: only pedestrians, no vehicles ---
+        if vehicle_count == 0 and person_count > 0 and self.state == "PERSON":
+            self.traffic_state = TRAFFIC_RED
+            self.ped_state = PED_WALK
+            self.timer_value = None  # display ----
             return self._info()
 
         # --- VEHICLE state ---
@@ -109,13 +115,14 @@ class StateMachine:
 
             if elapsed >= self.phase_duration:
                 if person_count > 0:
-                    # ไป YELLOW ก่อน PERSON
+                    # go to YELLOW before PERSON
                     self.state = "YELLOW"
                     self.phase_start = now
                     self.phase_duration = YELLOW_DURATION
                     self.timer_value = self.phase_duration
                 else:
                     # ถ้าไม่มีคน -> รีเซ็ต VEHICLE ใหม่
+                    # If no pedestrians -> reset VEHICLE phase
                     self.phase_start = now
                     self.phase_duration = self.calculate_vehicle_timer(vehicle_count)
                     self.timer_value = self.phase_duration
@@ -127,7 +134,7 @@ class StateMachine:
             self.timer_value = max(0, self.phase_duration - elapsed)
 
             if elapsed >= self.phase_duration:
-                # ไป PERSON
+                # go to PERSON
                 self.state = "PERSON"
                 self.phase_start = now
                 self.phase_duration = self.calculate_person_timer(person_count)
@@ -140,7 +147,7 @@ class StateMachine:
             self.timer_value = max(0, self.phase_duration - elapsed)
 
             if elapsed >= self.phase_duration:
-                # กลับไป VEHICLE
+                # return to VEHICLE
                 self.state = "VEHICLE"
                 self.phase_start = now
                 self.phase_duration = self.calculate_vehicle_timer(vehicle_count)
