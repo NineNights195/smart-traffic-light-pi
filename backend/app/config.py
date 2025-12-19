@@ -2,12 +2,12 @@
 from pathlib import Path
 
 # SIMULATION mode: if True, hardware GPIO won't be used (canvas only)
-SIMULATION = True
+SIMULATION = False
 
 # ---------------- YOLO / Camera ----------------
 MODEL_PATH = Path(__file__).resolve().parent.parent / "models" / "yolov8n.pt"
 IMG_SZ = 640
-CONFIDENCE = 0.3
+CONFIDENCE = 0.35
 TARGET_CLASSES = [0, 2]  # person + vehicles of interest
 
 # Camera indices (Picamera2)
